@@ -8,6 +8,12 @@ use App\Services\MailingManager;
 
 class RequestedBudgetSubscriber implements EventDispatcherInterface
 {
+	private $mailingManager;
+
+	public function __construct(MailingManager $mailingManager) {
+		$this->mailingManager = $mailingManager;
+	}
+
 	public static function getSubscribedEvents()
 	{
 		return array(
@@ -18,6 +24,6 @@ class RequestedBudgetSubscriber implements EventDispatcherInterface
 	public function onPresupuestoSolicitado(RequestedBudgetEvent $budget)
 	{
 		$this->budget = $budget->getBudget();
-		MailingManager::sendEmailBudgetClient($budget);
+		$this->mailingManager->sendEmailBudgetClient($budget);
 	}
 }

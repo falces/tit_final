@@ -9,7 +9,11 @@ use App\Services\MailingManager;
 
 class ApprovedBudgetSubscriber implements EventSubscriberInterface
 {
-	private $budget;
+	private $mailingManager;
+
+	public function __construct(MailingManager $mailingManager) {
+		$this->mailingManager = $mailingManager;
+	}
 
 	public static function getSubscribedEvents()
 	{
@@ -23,7 +27,7 @@ class ApprovedBudgetSubscriber implements EventSubscriberInterface
 	public function onPresupuestoAprobado(ApprovedBudgetEvent $budget)
 	{
 		$this->budget = $budget->getBudget();
-		MailingManager::sendEmailProyectStatusClient($budget);
-		MailingManager::sendEmailProyectStatusStaff($budget);
+		$this->mailingManager->sendEmailProyectStatusClient($budget);
+		$this->mailingManager->sendEmailProyectStatusStaff($budget);
 	}
 }
